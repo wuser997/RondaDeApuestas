@@ -13,10 +13,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import PruebaUno.Equipo;
-import PruebaUno.Partido;
-import PruebaUno.Ronda;
-
 public class ClaseMain {
 
 	public static void main(String[] args) throws ClassNotFoundException {
@@ -35,8 +31,6 @@ public class ClaseMain {
 			Charset charset = Charset.defaultCharset();
 
 			int tamanio = Files.readAllLines(direccion_archivo, charset).size();
-
-			System.out.println(tamanio);
 
 			for (int i = 0; i < tamanio; i++) {
 
@@ -128,17 +122,12 @@ public class ClaseMain {
 
 		}
 
-		System.out.println(ArregloDePartidos.length);
-
-		Ronda ronda1 = new Ronda(ArregloDePartidos, "1");
-
-		// Partido p1=ronda1.getPartidos()[0];
-
 		// FIN
 		// ARCHIVO_RESULTADOS----------------------------------------------------------------------
 		// ----------------------------------------------------------------------------------------
 		// **************************************************************************************//
-		// COMIENZO LECTURA DESDE LA BASE DE DATOS PRONOSTICO--------------------------------------
+		// COMIENZO LECTURA DESDE LA BASE DE DATOS
+		// PRONOSTICO--------------------------------------
 		// -----------------------------------------------------------------------------------------
 
 		List<List<String>> Equipos_Codigo_Pronostico_String = new ArrayList<>();
@@ -214,8 +203,6 @@ public class ClaseMain {
 			System.out.println(e);
 		} // fin SEGUNDO try-catch
 
-		System.out.println(Tabla_Ronda_1_Pronostico.size() + "    tabla pronostico TAMAÑO");
-
 		List<Equipo> Equipos_Del_Pronostico = new ArrayList<>();
 
 		for (int i = 0; i <= Equipos_Codigo_Pronostico_String.size() - 1; i++) {
@@ -223,11 +210,6 @@ public class ClaseMain {
 					Equipos_Codigo_Pronostico_String.get(i).get(1));
 			Equipos_Del_Pronostico.add(equipo);
 
-		}
-
-		// imprimo equipos
-		for (int i = 0; i <= Equipos_Del_Pronostico.size() - 1; i++) {
-			System.out.println(Equipos_Del_Pronostico.get(i).nombre);
 		}
 
 		List<Partido> Partidos_Del_Pronostico = new ArrayList<>();
@@ -379,38 +361,36 @@ public class ClaseMain {
 
 		} // fin FOR Equipos_Del_Pronostico
 
-		// ¡¡¡¡¡¡RECORDAR PARTIDOS TIENE DOS CONSTRUCTORES !!!!!!!!!!
+		// FIN LECTURA
+		// PRONOSTICO------------------------------------------------------------------
+		// ----------------------------------------------------------------------------------------
+		// ----------------------------------------------------------------------------------------
 
-		System.out.println();
+		Ronda ronda1 = new Ronda(ArregloDePartidos, "1");
 
-		for (int i = 0; i <= Partidos_Del_Pronostico.size() - 1; i++) {
-			System.out.println(Partidos_Del_Pronostico.get(i).getEquipo1().nombre + "+++++++++"
-					+ Partidos_Del_Pronostico.get(i).getEquipo2().nombre);
-		}
+		int almacena_puntos_pronostico = 0;
+		for (int i = 0; i <= Lista_Pronostico.size() - 1; i++) {
 
-		// Verifico que la LISTA DE PRONOSTICOS tenga los partidos correctos
-		// List<Equipo> Equipos_Del_Pronostico = new ArrayList<>();
+			if (ronda1.getPartidos()[i].equals(Lista_Pronostico.get(i).getPartido())) {
 
-		System.out.println();
-		System.out.println("LISTA PRONOSTICO");
-		System.out.println();
+				String resultado_del_partido;
 
-		for (int i = 0; i <= Partidos_Del_Pronostico.size() - 1; i++) {
-			System.out.println(Partidos_Del_Pronostico.get(i).getEquipo1().nombre + "+++++++++"
-					+ Partidos_Del_Pronostico.get(i).getEquipo2().nombre);
+				resultado_del_partido = ronda1.getPartidos()[i].resultado(Lista_Pronostico.get(i).getEquipo());
 
-			System.out.println(Lista_Pronostico.get(i).getEquipo().getNombre());
+				if (Lista_Pronostico.get(i).getResultado().toString().equals(resultado_del_partido)) {
 
-			System.out.println(Lista_Pronostico.get(i).getPartido().getEquipo1().getNombre() + "   "
-					+ Lista_Pronostico.get(i).getPartido().getEquipo2().getNombre());
+					almacena_puntos_pronostico = Lista_Pronostico.get(i).puntos() + almacena_puntos_pronostico;
 
-			System.out.println(Lista_Pronostico.get(i).getResultado().toString());
+				}
 
-			System.out.println();
+			} else {
+				System.out.println(
+						"El partido  " + i + "cargado en pronóstico no coincide con el partido " + i + "de la ronda");
+			}
 
-		}
+		} // fin del FOR
 
-		// -----------------------------------------------------------------------------------------
+		System.out.println("Los aciertos del usuario anónimo fueron  " + almacena_puntos_pronostico + ".");
 
 	}// fin main
 

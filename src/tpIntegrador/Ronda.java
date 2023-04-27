@@ -59,7 +59,7 @@ public class Ronda {
 
 	public int puntos() {
 
-		return 1;
+		return 0;// cambiar cuando se usen más rondas
 	}
 
 	
